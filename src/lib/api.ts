@@ -25,7 +25,10 @@ class ApiClient {
       ...options,
     };
 
-    const response = await fetch(`${this.baseURL}${endpoint}`, config);
+    const fullUrl = `${this.baseURL}${endpoint}`;
+    console.log('Making request to:', fullUrl);
+    
+    const response = await fetch(fullUrl, config);
     
     if (!response.ok) {
       const error = await response.json().catch(() => ({ error: 'Error de conexión' }));
