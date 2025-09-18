@@ -7,7 +7,8 @@ import Header from "@/components/Header";
 
 type Message = { _id: string; sender: "user" | "ia"; content: string; createdAt: string };
 type Chat = { 
-  _id: string; 
+  _id?: string;  // Para chats existentes
+  id?: string;   // Para nuevos chats
   partner: { nombre: string; nacionalidad: string; genero: string; idioma_objetivo: string }; 
   activo: boolean; 
   createdAt: string 
@@ -84,6 +85,8 @@ export default function ChatDetailPage() {
       
       // Si se detectó un nuevo chat, mostrarlo y actualizar la lista de chats
       if (data.newChat) {
+        console.log('🆕 Nuevo chat recibido:', data.newChat);
+        console.log('🆕 ID del nuevo chat:', data.newChat.id || data.newChat._id);
         setNewChat(data.newChat);
         qc.invalidateQueries({ queryKey: ["chats"] });
       }
@@ -127,7 +130,7 @@ export default function ChatDetailPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <a
-                    href={`/chats/${newChat._id}`}
+                    href={`/chats/${newChat.id || newChat._id}`}
                     className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-sm font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
