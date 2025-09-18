@@ -62,7 +62,7 @@ export default function OnboardingForm({ onComplete }: OnboardingFormProps) {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/onboarding/complete', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/onboarding/complete`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: frontendchat
+    env: node
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://backendchat-bmhj.onrender.com/api
+      - key: NEXT_PUBLIC_API_TIMEOUT
+        value: 10000
+      - key: NEXT_PUBLIC_APP_NAME
+        value: ChatBot App
+      - key: NEXT_PUBLIC_ENABLE_GOOGLE_AUTH
+        value: false
+      - key: NEXT_PUBLIC_ENABLE_ANALYTICS
+        value: false

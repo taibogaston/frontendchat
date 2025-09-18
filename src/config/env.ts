@@ -37,5 +37,8 @@ export const validateConfig = () => {
 
 // Initialize validation
 if (typeof window !== 'undefined') {
+  console.log('🔧 Environment config:', config);
+  console.log('🌐 API Base URL:', config.api.baseUrl);
+  console.log('⏱️ API Timeout:', config.api.timeout);
   validateConfig();
 }

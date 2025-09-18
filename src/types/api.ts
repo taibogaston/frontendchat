@@ -17,6 +17,12 @@ export interface RegisterResponse {
   message: string;
 }
 
+export interface VerifyEmailResponse {
+  message: string;
+  token?: string;
+  user?: User;
+}
+
 export interface ApiError {
   error: string;
 }

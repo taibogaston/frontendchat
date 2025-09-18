@@ -27,7 +27,7 @@ export default function ChatDetailPage() {
     queryFn: async () => {
       if (!token) throw new Error("No autenticado");
       
-      const res = await fetch(`http://localhost:4000/api/chats/${chatId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/chats/${chatId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export default function ChatDetailPage() {
     queryFn: async () => {
       if (!token) throw new Error("No autenticado");
       
-      const res = await fetch(`http://localhost:4000/api/messages/${chatId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/messages/${chatId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ export default function ChatDetailPage() {
     mutationFn: async (content: string) => {
       if (!token) throw new Error("No autenticado");
       
-      const res = await fetch(`http://localhost:4000/api/messages/${chatId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/messages/${chatId}`, {
         method: "POST",
         headers: { 
           "Authorization": `Bearer ${token}`,

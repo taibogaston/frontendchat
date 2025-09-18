@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { apiClient } from '@/lib/api';
 
 interface VerifyEmailPageProps {
   params: Promise<{
@@ -18,32 +19,36 @@ export default function VerifyEmailPage({ params }: VerifyEmailPageProps) {
     const verifyEmail = async () => {
       try {
         const resolvedParams = await params;
-        const response = await fetch(`/api/auth/verify/${resolvedParams.token}`);
-        const data = await response.json();
-
-        if (response.ok) {
-          setStatus('success');
-          setMessage(data.message);
-          
-          // Guardar token y usuario
+        console.log('🔍 Verificando email con token:', resolvedParams.token);
+        
+        const data = await apiClient.verifyEmail(resolvedParams.token);
+        
+        setStatus('success');
+        setMessage(data.message || 'Email verificado exitosamente');
+        
+        // Guardar token y usuario
+        if (data.token && data.user) {
           localStorage.setItem('token', data.token);
           localStorage.setItem('user', JSON.stringify(data.user));
           
           // Redirigir según el estado del onboarding
           setTimeout(() => {
-            if (data.user.onboardingCompleted) {
+            if (data.user?.onboardingCompleted) {
               router.push('/chats');
             } else {
               router.push('/onboarding');
             }
           }, 2000);
         } else {
-          setStatus('error');
-          setMessage(data.error || 'Error verificando email');
+          // Si no hay token en la respuesta, redirigir al login
+          setTimeout(() => {
+            router.push('/auth');
+          }, 2000);
         }
-      } catch {
+      } catch (error) {
+        console.error('❌ Error verificando email:', error);
         setStatus('error');
-        setMessage('Error de conexión');
+        setMessage(error instanceof Error ? error.message : 'Error de conexión');
       }
     };
 

@@ -1,7 +1,21 @@
-import { LoginResponse, RegisterResponse } from '@/types/api';
-import { config } from '@/config/env';
+import { LoginResponse, RegisterResponse, VerifyEmailResponse } from '@/types/api';
 
-const API_BASE_URL = config.api.baseUrl;
+// Configuración de API con fallback robusto
+const getApiBaseUrl = () => {
+  // Prioridad: variable de entorno > fallback hardcodeado
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  const fallbackUrl = 'http://localhost:4000/api';
+  
+  const apiUrl = envUrl || fallbackUrl;
+  
+  // Debug logs
+  console.log('🔧 Environment API URL:', envUrl);
+  console.log('🔧 Final API URL:', apiUrl);
+  
+  return apiUrl;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 class ApiClient {
   private baseURL: string;
@@ -27,11 +41,16 @@ class ApiClient {
 
     const fullUrl = `${this.baseURL}${endpoint}`;
     console.log('Making request to:', fullUrl);
+    console.log('Request config:', config);
     
     const response = await fetch(fullUrl, config);
     
+    console.log('Response status:', response.status);
+    console.log('Response headers:', response.headers);
+    
     if (!response.ok) {
       const error = await response.json().catch(() => ({ error: 'Error de conexión' }));
+      console.error('API Error:', error);
       throw new Error(error.error || `HTTP ${response.status}`);
     }
 
@@ -53,8 +72,8 @@ class ApiClient {
     });
   }
 
-  async verifyEmail(token: string) {
-    return this.request(`/auth/verify/${token}`);
+  async verifyEmail(token: string): Promise<VerifyEmailResponse> {
+    return this.request<VerifyEmailResponse>(`/auth/verify/${token}`);
   }
 
   async forgotPassword(email: string) {

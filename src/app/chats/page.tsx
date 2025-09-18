@@ -32,7 +32,7 @@ export default function ChatsPage() {
       console.log("ChatsPage - queryFn executing:", { userId: user?.id, hasToken: !!token });
       if (!token || !user?.id) throw new Error("No autenticado");
       
-      const res = await fetch(`http://localhost:4000/api/chats`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/chats`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',

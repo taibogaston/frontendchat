@@ -42,6 +42,18 @@ NEXT_PUBLIC_ENABLE_ANALYTICS=true
    - `NEXT_PUBLIC_ENABLE_GOOGLE_AUTH`: true/false
    - `NEXT_PUBLIC_ENABLE_ANALYTICS`: true/false
 
+### Render
+
+1. Conecta tu repositorio a Render
+2. Selecciona "Web Service" como framework
+3. En Environment variables, agrega:
+   - `NEXT_PUBLIC_API_URL`: `https://backendchat-bmhj.onrender.com/api`
+   - `NEXT_PUBLIC_API_TIMEOUT`: `10000`
+   - `NEXT_PUBLIC_APP_NAME`: `ChatBot App`
+4. Configura el build command: `npm run build`
+5. Configura el start command: `npm start`
+6. Deja el publish directory vacío (usar .next por defecto)
+
 ### Netlify
 
 1. Conecta tu repositorio a Netlify
