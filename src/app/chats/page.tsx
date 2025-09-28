@@ -98,20 +98,6 @@ export default function ChatsPage() {
           </div>
         </div>
 
-        {/* Debug Info */}
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <h3 className="font-bold text-lg text-yellow-800 mb-2">🐛 Debug Info</h3>
-          <div className="text-sm text-yellow-700 space-y-1">
-            <p><strong>User ID:</strong> {user?.id || 'No user'}</p>
-            <p><strong>User ID Type:</strong> {typeof user?.id}</p>
-            <p><strong>Has Token:</strong> {token ? 'Yes' : 'No'}</p>
-            <p><strong>Token Preview:</strong> {token ? token.substring(0, 20) + '...' : 'None'}</p>
-            <p><strong>Is Loading:</strong> {isLoading ? 'Yes' : 'No'}</p>
-            <p><strong>Has Error:</strong> {error ? 'Yes' : 'No'}</p>
-            <p><strong>Error Message:</strong> {error?.message || 'None'}</p>
-            <p><strong>Data Length:</strong> {data?.length || 0}</p>
-          </div>
-        </div>
         {isLoading && <div className="text-[var(--muted-foreground)]">Cargando...</div>}
         {error && <div className="text-red-400">Error cargando chats</div>}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
