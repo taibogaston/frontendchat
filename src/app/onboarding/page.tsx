@@ -19,7 +19,7 @@ export default function OnboardingPage() {
     // Verificar si ya completó el onboarding
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user.onboardingCompleted) {
-      router.push('/chats');
+      router.push('/inicio');
       return;
     }
 
@@ -31,8 +31,8 @@ export default function OnboardingPage() {
     const updatedUser = { ...data.user, onboardingCompleted: true };
     localStorage.setItem('user', JSON.stringify(updatedUser));
 
-    // Redirigir a la lista de chats
-    router.push('/chats');
+    // Redirigir a la página de inicio para seleccionar personaje
+    router.push('/inicio');
   };
 
   if (loading) {

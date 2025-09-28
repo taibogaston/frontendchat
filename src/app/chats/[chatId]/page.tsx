@@ -10,7 +10,7 @@ type Message = { _id: string; sender: "user" | "ia"; content: string; createdAt:
 type Chat = { 
   _id?: string;  // Para chats existentes
   id?: string;   // Para nuevos chats
-  partner: { nombre: string; nacionalidad: string; genero: string; idioma_objetivo: string }; 
+  partner: { nombre: string; nacionalidad: string; genero: "M" | "F"; idioma_objetivo: string }; 
   activo: boolean; 
   createdAt: string 
 };

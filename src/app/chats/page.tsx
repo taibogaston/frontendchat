@@ -9,7 +9,7 @@ import { useEffect } from "react";
 type Chat = {
   _id: string;
   userId: string;
-  partner: { nombre: string; nacionalidad: string; genero: string; idioma_objetivo: string };
+  partner: { nombre: string; nacionalidad: string; genero: "M" | "F"; idioma_objetivo: string };
   activo: boolean;
   createdAt: string;
 };

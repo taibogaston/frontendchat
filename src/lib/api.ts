@@ -163,23 +163,23 @@ class ApiClient {
 
   // Character endpoints
   async getCharacters() {
-    return this.request('/characters');
+    return this.request<any[]>('/characters');
   }
 
   async getCharacterById(id: string) {
-    return this.request(`/characters/${id}`);
+    return this.request<any>(`/characters/${id}`);
   }
 
   async getCharactersByLanguage(idioma: string) {
-    return this.request(`/characters/language/${idioma}`);
+    return this.request<any[]>(`/characters/language/${idioma}`);
   }
 
   async getCharactersByNationality(nacionalidad: string) {
-    return this.request(`/characters/nationality/${nacionalidad}`);
+    return this.request<any[]>(`/characters/nationality/${nacionalidad}`);
   }
 
   async searchCharacters(criteria: Record<string, unknown>) {
-    return this.request('/characters/search', {
+    return this.request<any[]>('/characters/search', {
       method: 'POST',
       body: JSON.stringify(criteria),
     });
@@ -191,32 +191,32 @@ class ApiClient {
     if (nacionalidad) params.append('nacionalidad', nacionalidad);
     if (genero) params.append('genero', genero);
     
-    return this.request(`/characters/recommended/user?${params.toString()}`);
+    return this.request<any[]>(`/characters/recommended/user?${params.toString()}`);
   }
 
   async createChatWithCharacter(characterId: string) {
-    return this.request(`/characters/${characterId}/chat`, {
+    return this.request<any>(`/characters/${characterId}/chat`, {
       method: 'POST',
     });
   }
 
   async getRandomCharacterByLanguage(idioma: string) {
-    return this.request(`/characters/random/language/${idioma}`);
+    return this.request<any>(`/characters/random/language/${idioma}`);
   }
 
   async validateMessage(characterId: string, message: string) {
-    return this.request(`/characters/${characterId}/validate`, {
+    return this.request<any>(`/characters/${characterId}/validate`, {
       method: 'POST',
       body: JSON.stringify({ message }),
     });
   }
 
   async getCharacterStats() {
-    return this.request('/characters/stats/overview');
+    return this.request<any>('/characters/stats/overview');
   }
 
   async seedCharacters() {
-    return this.request('/characters/seed', {
+    return this.request<any>('/characters/seed', {
       method: 'POST',
     });
   }

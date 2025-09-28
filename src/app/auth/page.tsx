@@ -15,7 +15,7 @@ export default function AuthPage() {
     // Verificar si ya está autenticado
     const token = localStorage.getItem('token');
     if (token) {
-      router.push('/chats');
+      router.push('/inicio');
     } else {
       setShowModal(true);
     }
@@ -34,7 +34,7 @@ export default function AuthPage() {
     console.log("🔐 AuthPage - Auth data set, redirecting...");
     
     if (user.onboardingCompleted) {
-      router.push('/chats');
+      router.push('/inicio');
     } else {
       router.push('/onboarding');
     }

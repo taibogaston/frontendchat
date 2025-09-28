@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 interface OnboardingFormProps {
-  onComplete: (data: { user: { onboardingCompleted: boolean }; defaultChat?: unknown }) => void;
+  onComplete: (data: { user: { onboardingCompleted: boolean } }) => void;
 }
 
 export default function OnboardingForm({ onComplete }: OnboardingFormProps) {
@@ -74,10 +74,9 @@ export default function OnboardingForm({ onComplete }: OnboardingFormProps) {
       const data = await response.json();
 
       if (response.ok) {
-        // Pasar tanto el usuario como el chat por defecto
+        // Pasar solo el usuario
         onComplete({
-          user: data.user,
-          defaultChat: data.defaultChat
+          user: data.user
         });
       } else {
         setError(data.error || 'Error completando onboarding');
