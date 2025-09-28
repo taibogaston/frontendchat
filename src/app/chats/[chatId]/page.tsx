@@ -47,6 +47,7 @@ export default function ChatDetailPage() {
     queryFn: async () => {
       if (!token) throw new Error("No autenticado");
       
+      console.log("🔍 Cargando mensajes para chatId:", chatId);
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/messages/${chatId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -54,9 +55,11 @@ export default function ChatDetailPage() {
         },
       });
       if (!res.ok) throw new Error("Error cargando mensajes");
-      return res.json();
+      const data = await res.json();
+      console.log("📨 Mensajes cargados:", data);
+      return data;
     },
-    enabled: !!token,
+    enabled: !!token && !!chatId,
   });
 
   useEffect(() => {
