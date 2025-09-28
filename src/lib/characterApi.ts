@@ -176,7 +176,7 @@ export function useCharacters() {
     }
   };
 
-  const searchCharacters = async (criteria: any) => {
+  const searchCharacters = async (criteria: Record<string, unknown>) => {
     try {
       setLoading(true);
       setError(null);

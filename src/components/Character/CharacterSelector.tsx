@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Character, CharacterApi, useCharacters } from '../../lib/characterApi';
+import { Character, useCharacters } from '../../lib/characterApi';
 
 interface CharacterSelectorProps {
   onCharacterSelect: (character: Character) => void;
@@ -30,11 +30,11 @@ export default function CharacterSelector({
     } else {
       loadCharacters();
     }
-  }, [selectedLanguage]);
+  }, [selectedLanguage, loadCharacters, loadCharactersByLanguage]);
 
   const handleSearch = () => {
     const criteria = Object.fromEntries(
-      Object.entries(searchCriteria).filter(([_, value]) => value !== '')
+      Object.entries(searchCriteria).filter(([, value]) => value !== '')
     );
     searchCharacters(criteria);
   };

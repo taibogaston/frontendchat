@@ -23,7 +23,7 @@ const IDIOMAS_POPULARES = [
 
 export default function TestCharactersPage() {
   const router = useRouter();
-  const [characters, setCharacters] = useState<Character[]>([]);
+  const [, setCharacters] = useState<Character[]>([]);
   const [charactersByLanguage, setCharactersByLanguage] = useState<{[key: string]: Character[]}>({});
   const [selectedLanguage, setSelectedLanguage] = useState<string>('español');
   const [currentPage, setCurrentPage] = useState(0);

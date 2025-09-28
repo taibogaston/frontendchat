@@ -54,7 +54,7 @@ export default function VerifyEmailPage({ params }: VerifyEmailPageProps) {
     };
 
     verifyEmail();
-  }, [params, router]);
+  }, [params, router, setAuthData]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">

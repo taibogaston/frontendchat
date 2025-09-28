@@ -1,4 +1,11 @@
 import { LoginResponse, RegisterResponse, VerifyEmailResponse } from '@/types/api';
+import { Character, ValidationResult, CharacterStats } from './characterApi';
+
+interface ChatResponse {
+  success: boolean;
+  chatId: string;
+  character: Character;
+}
 
 // Configuración de API con fallback robusto
 const getApiBaseUrl = () => {
@@ -163,23 +170,23 @@ class ApiClient {
 
   // Character endpoints
   async getCharacters() {
-    return this.request<any[]>('/characters');
+    return this.request<Character[]>('/characters');
   }
 
   async getCharacterById(id: string) {
-    return this.request<any>(`/characters/${id}`);
+    return this.request<Character>(`/characters/${id}`);
   }
 
   async getCharactersByLanguage(idioma: string) {
-    return this.request<any[]>(`/characters/language/${idioma}`);
+    return this.request<Character[]>(`/characters/language/${idioma}`);
   }
 
   async getCharactersByNationality(nacionalidad: string) {
-    return this.request<any[]>(`/characters/nationality/${nacionalidad}`);
+    return this.request<Character[]>(`/characters/nationality/${nacionalidad}`);
   }
 
   async searchCharacters(criteria: Record<string, unknown>) {
-    return this.request<any[]>('/characters/search', {
+    return this.request<Character[]>('/characters/search', {
       method: 'POST',
       body: JSON.stringify(criteria),
     });
@@ -191,32 +198,32 @@ class ApiClient {
     if (nacionalidad) params.append('nacionalidad', nacionalidad);
     if (genero) params.append('genero', genero);
     
-    return this.request<any[]>(`/characters/recommended/user?${params.toString()}`);
+    return this.request<Character[]>(`/characters/recommended/user?${params.toString()}`);
   }
 
   async createChatWithCharacter(characterId: string) {
-    return this.request<any>(`/characters/${characterId}/chat`, {
+    return this.request<ChatResponse>(`/characters/${characterId}/chat`, {
       method: 'POST',
     });
   }
 
   async getRandomCharacterByLanguage(idioma: string) {
-    return this.request<any>(`/characters/random/language/${idioma}`);
+    return this.request<Character>(`/characters/random/language/${idioma}`);
   }
 
   async validateMessage(characterId: string, message: string) {
-    return this.request<any>(`/characters/${characterId}/validate`, {
+    return this.request<ValidationResult>(`/characters/${characterId}/validate`, {
       method: 'POST',
       body: JSON.stringify({ message }),
     });
   }
 
   async getCharacterStats() {
-    return this.request<any>('/characters/stats/overview');
+    return this.request<CharacterStats>('/characters/stats/overview');
   }
 
   async seedCharacters() {
-    return this.request<any>('/characters/seed', {
+    return this.request<{ message: string }>('/characters/seed', {
       method: 'POST',
     });
   }

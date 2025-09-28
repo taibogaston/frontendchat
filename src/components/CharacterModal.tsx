@@ -315,7 +315,7 @@ const CharacterModal: React.FC<CharacterModalProps> = ({ character, isOpen, onCl
                     key={index}
                     className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full"
                   >
-                    "{expresion}"
+                    &quot;{expresion}&quot;
                   </span>
                 ))}
               </div>
