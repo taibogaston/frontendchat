@@ -64,6 +64,35 @@ body {
   box-shadow: 0 8px 25px var(--shadow);
 }
 
+/* Animaciones épicas para el modal */
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-30px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.6);
+  }
+}
+
+.animate-modalSlideIn {
+  animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animate-pulseGlow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
 /* Scrollbar personalizado */
 ::-webkit-scrollbar {
   width: 6px;

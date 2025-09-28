@@ -22,20 +22,20 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 backdrop-blur-sm bg-gray-900/30 z-40"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-[var(--sidebar-bg)] border-l border-[var(--sidebar-border)] transform transition-transform duration-300 ease-in-out z-50 ${
+        className={`fixed top-0 right-0 h-full w-80 backdrop-blur-md bg-gray-100/95 border-l border-gray-300/30 transform transition-transform duration-300 ease-in-out z-50 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[var(--sidebar-border)]">
+          <div className="flex items-center justify-between p-6 border-b border-gray-300/30">
             <h2 className="text-xl font-semibold text-[var(--foreground)]">
               Menú
             </h2>
@@ -198,14 +198,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </nav>
 
           {/* Footer */}
-          <div className="p-6 border-t border-[var(--sidebar-border)]">
+          <div className="p-6 border-t border-gray-300/30">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-red-600 hover:bg-opacity-20 transition-colors group"
+              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-red-600 hover:bg-opacity-20 transition-colors group hover:text-white"
             >
-              <div className="w-8 h-8 bg-[var(--muted)] rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-[var(--muted)] rounded-lg flex items-center justify-center group-hover:bg-red-500 group-hover:bg-opacity-30 transition-colors">
                 <svg
-                  className="w-5 h-5 text-[var(--foreground)]"
+                  className="w-5 h-5 text-[var(--foreground)] group-hover:text-white transition-colors"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -218,7 +218,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   />
                 </svg>
               </div>
-              <span className="text-[var(--foreground)] group-hover:text-red-400 transition-colors">
+              <span className="text-[var(--foreground)] group-hover:text-white transition-colors">
                 Cerrar Sesión
               </span>
             </button>

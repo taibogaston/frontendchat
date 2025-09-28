@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Character, CharacterApi } from '../../lib/characterApi';
 import DarkHeader from '../../components/DarkHeader';
 import CharacterAvatar from '../../components/CharacterAvatar';
+import CharacterModal from '../../components/CharacterModal';
 
 // Los 10 idiomas más hablados del mundo
 const IDIOMAS_POPULARES = [
@@ -28,6 +29,8 @@ export default function TestCharactersPage() {
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const CHARACTERS_PER_PAGE = 4;
 
@@ -107,6 +110,16 @@ export default function TestCharactersPage() {
   const changeLanguage = (languageCode: string) => {
     setSelectedLanguage(languageCode);
     setCurrentPage(0); // Resetear a la primera página
+  };
+
+  const openCharacterModal = (character: Character) => {
+    setSelectedCharacter(character);
+    setIsModalOpen(true);
+  };
+
+  const closeCharacterModal = () => {
+    setSelectedCharacter(null);
+    setIsModalOpen(false);
   };
 
   const selectCharacter = async (character: Character) => {
@@ -249,6 +262,15 @@ export default function TestCharactersPage() {
                           <p className="text-sm text-[var(--muted-foreground)] line-clamp-3 text-center leading-relaxed">
                             {character.personalidad.descripcion}
                           </p>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openCharacterModal(character);
+                            }}
+                            className="text-xs text-[var(--accent)] hover:text-[var(--primary)] mt-1 font-medium cursor-pointer transition-colors duration-200 hover:underline"
+                          >
+                            Ver más...
+                          </button>
                         </div>
 
                         <div className="flex flex-wrap gap-1 mb-4 justify-center">
@@ -262,8 +284,20 @@ export default function TestCharactersPage() {
                           ))}
                         </div>
 
-                        <div className="text-center">
-                          <div className="w-full bg-[var(--accent)] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[var(--primary)] transition-colors">
+                        <div className="text-center space-y-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openCharacterModal(character);
+                            }}
+                            className="w-full text-[var(--muted-foreground)] hover:text-[var(--foreground)] text-sm font-medium py-1 transition-all duration-200 cursor-pointer hover:bg-[var(--hover)] rounded-lg hover:scale-105"
+                          >
+                            Ver perfil completo
+                          </button>
+                          <div 
+                            onClick={() => selectCharacter(character)}
+                            className="w-full bg-[var(--accent)] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[var(--primary)] transition-all duration-200 cursor-pointer hover:scale-105 hover:shadow-lg"
+                          >
                             Chatear
                           </div>
                         </div>
@@ -323,6 +357,14 @@ export default function TestCharactersPage() {
           )}
         </div>
       </div>
+
+      {/* Modal de Personaje */}
+      <CharacterModal
+        character={selectedCharacter}
+        isOpen={isModalOpen}
+        onClose={closeCharacterModal}
+        onChat={selectCharacter}
+      />
     </div>
   );
 }
