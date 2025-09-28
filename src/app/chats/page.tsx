@@ -2,7 +2,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
-import Header from "@/components/Header";
+import DarkHeader from "@/components/DarkHeader";
+import CharacterAvatar from "@/components/CharacterAvatar";
 import { useEffect } from "react";
 
 type Chat = {
@@ -47,46 +48,48 @@ export default function ChatsPage() {
   });
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-slate-50">
-      <Header title="Mis Chats" />
+    <main className="min-h-screen bg-[var(--background)]">
+      <DarkHeader title="Mis Chats" />
       <div className="max-w-3xl mx-auto w-full px-4 py-6 space-y-4">
-        {/* Botón para probar personajes */}
-        <div className="bg-blue-500 rounded-lg p-4 text-white">
+        {/* Botón para ir a personajes */}
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-bold text-lg">🎭 Prueba Personajes</h3>
-              <p className="text-sm opacity-90">Chatea con personajes únicos y consistentes</p>
+              <h3 className="font-bold text-lg text-[var(--foreground)]">🎭 Seleccionar Personaje</h3>
+              <p className="text-sm text-[var(--muted-foreground)]">Chatea con personajes únicos y consistentes</p>
             </div>
             <Link
-              href="/test-characters"
-              className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded text-sm"
+              href="/inicio"
+              className="bg-[var(--accent)] text-[var(--accent-foreground)] px-4 py-2 rounded-lg hover:bg-[var(--primary)] transition-colors text-sm font-medium"
             >
-              Probar Personajes
+              Ir a Inicio
             </Link>
           </div>
         </div>
-        {isLoading && <div className="text-gray-500">Cargando...</div>}
-        {error && <div className="text-red-600">Error cargando chats</div>}
+        {isLoading && <div className="text-[var(--muted-foreground)]">Cargando...</div>}
+        {error && <div className="text-red-400">Error cargando chats</div>}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {data?.map((c) => (
             <div
               key={c._id}
-              className="group rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-lg hover:border-blue-300 transition-all duration-300 p-6 flex flex-col gap-4"
+              className="group rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-sm hover:shadow-lg hover:border-[var(--accent)] transition-all duration-300 p-6 flex flex-col gap-4"
             >
               <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-md">
-                  {c.partner.nombre.charAt(0)}
-                </div>
+                <CharacterAvatar 
+                  character={c.partner} 
+                  size="md" 
+                  className="shadow-md"
+                />
                 <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-gray-900 truncate">{c.partner.nombre}</div>
-                  <div className="text-sm text-gray-600 flex items-center gap-1">
+                  <div className="font-semibold text-[var(--foreground)] truncate">{c.partner.nombre}</div>
+                  <div className="text-sm text-[var(--muted-foreground)] flex items-center gap-1">
                     <span className="w-2 h-2 bg-green-400 rounded-full"></span>
                     {c.partner.idioma_objetivo}
                   </div>
                 </div>
               </div>
               
-              <div className="text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2">
+              <div className="text-xs text-[var(--muted-foreground)] bg-[var(--muted)] rounded-lg px-3 py-2">
                 {new Date(c.createdAt).toLocaleDateString('es-ES', { 
                   day: 'numeric', 
                   month: 'short', 
@@ -96,7 +99,7 @@ export default function ChatsPage() {
               </div>
               
               <Link
-                className="group-hover:bg-blue-600 group-hover:text-white bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 text-center"
+                className="group-hover:bg-[var(--accent)] group-hover:text-white bg-[var(--muted)] text-[var(--foreground)] px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 text-center"
                 href={`/chats/${c._id}`}
               >
                 Abrir conversación
