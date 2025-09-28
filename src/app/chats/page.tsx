@@ -50,6 +50,21 @@ export default function ChatsPage() {
     <main className="min-h-screen bg-gradient-to-b from-white to-slate-50">
       <Header title="Mis Chats" />
       <div className="max-w-3xl mx-auto w-full px-4 py-6 space-y-4">
+        {/* Botón para probar personajes */}
+        <div className="bg-blue-500 rounded-lg p-4 text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-bold text-lg">🎭 Prueba Personajes</h3>
+              <p className="text-sm opacity-90">Chatea con personajes únicos y consistentes</p>
+            </div>
+            <Link
+              href="/test-characters"
+              className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded text-sm"
+            >
+              Probar Personajes
+            </Link>
+          </div>
+        </div>
         {isLoading && <div className="text-gray-500">Cargando...</div>}
         {error && <div className="text-red-600">Error cargando chats</div>}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

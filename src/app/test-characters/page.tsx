@@ -38,7 +38,56 @@ export default function TestCharactersPage() {
       setSelectedCharacter(character);
       setError(null);
       
-      // Crear chat con el personaje
+      // Primero verificar si ya existe un chat con este personaje
+      try {
+        const existingChats = await fetch('http://localhost:4000/api/chats', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        
+        if (existingChats.ok) {
+          const chats = await existingChats.json();
+          const existingChat = chats.find((chat: any) => 
+            chat.partner.nombre === character.nombre && 
+            chat.partner.nacionalidad === character.nacionalidad
+          );
+          
+          if (existingChat) {
+            console.log('Usando chat existente:', existingChat);
+            setChatId(existingChat._id);
+            
+            // Cargar mensajes existentes
+            try {
+              const messagesResponse = await fetch(`http://localhost:4000/api/messages/${existingChat._id}`, {
+                headers: {
+                  'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+              });
+              
+              if (messagesResponse.ok) {
+                const messagesData = await messagesResponse.json();
+                const formattedMessages = messagesData.map((msg: any) => ({
+                  sender: msg.sender,
+                  content: msg.content
+                }));
+                setMessages(formattedMessages);
+                console.log('Mensajes cargados:', formattedMessages);
+              } else {
+                setMessages([]);
+              }
+            } catch (err) {
+              console.log('Error cargando mensajes:', err);
+              setMessages([]);
+            }
+            return;
+          }
+        }
+      } catch (err) {
+        console.log('No se pudieron obtener chats existentes, creando nuevo chat');
+      }
+      
+      // Si no existe, crear chat con el personaje
       const result = await CharacterApi.createChatWithCharacter(character._id);
       if (result) {
         setChatId(result.chatId);
@@ -216,7 +265,8 @@ export default function TestCharactersPage() {
               </div>
               <button
                 onClick={resetChat}
-                className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded text-sm"
+
+                className="bg-green-500 bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded text-sm text-white font-medium"
               >
                 Cambiar Personaje
               </button>
