@@ -160,6 +160,66 @@ class ApiClient {
       method: 'POST',
     });
   }
+
+  // Character endpoints
+  async getCharacters() {
+    return this.request('/characters');
+  }
+
+  async getCharacterById(id: string) {
+    return this.request(`/characters/${id}`);
+  }
+
+  async getCharactersByLanguage(idioma: string) {
+    return this.request(`/characters/language/${idioma}`);
+  }
+
+  async getCharactersByNationality(nacionalidad: string) {
+    return this.request(`/characters/nationality/${nacionalidad}`);
+  }
+
+  async searchCharacters(criteria: Record<string, unknown>) {
+    return this.request('/characters/search', {
+      method: 'POST',
+      body: JSON.stringify(criteria),
+    });
+  }
+
+  async getRecommendedCharacters(idioma_objetivo?: string, nacionalidad?: string, genero?: string) {
+    const params = new URLSearchParams();
+    if (idioma_objetivo) params.append('idioma_objetivo', idioma_objetivo);
+    if (nacionalidad) params.append('nacionalidad', nacionalidad);
+    if (genero) params.append('genero', genero);
+    
+    return this.request(`/characters/recommended/user?${params.toString()}`);
+  }
+
+  async createChatWithCharacter(characterId: string) {
+    return this.request(`/characters/${characterId}/chat`, {
+      method: 'POST',
+    });
+  }
+
+  async getRandomCharacterByLanguage(idioma: string) {
+    return this.request(`/characters/random/language/${idioma}`);
+  }
+
+  async validateMessage(characterId: string, message: string) {
+    return this.request(`/characters/${characterId}/validate`, {
+      method: 'POST',
+      body: JSON.stringify({ message }),
+    });
+  }
+
+  async getCharacterStats() {
+    return this.request('/characters/stats/overview');
+  }
+
+  async seedCharacters() {
+    return this.request('/characters/seed', {
+      method: 'POST',
+    });
+  }
 }
 
 export const apiClient = new ApiClient(API_BASE_URL);
