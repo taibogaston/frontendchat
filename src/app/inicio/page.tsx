@@ -277,7 +277,10 @@ export default function TestCharactersPage() {
                             Ver perfil completo
                           </button>
                           <div 
-                            onClick={() => selectCharacter(character)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              selectCharacter(character);
+                            }}
                             className="w-full bg-[var(--accent)] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[var(--primary)] transition-all duration-200 cursor-pointer hover:scale-105 hover:shadow-lg"
                           >
                             Chatear
