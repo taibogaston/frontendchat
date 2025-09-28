@@ -122,46 +122,28 @@ export default function TestCharactersPage() {
     setIsModalOpen(false);
   };
 
+  const [isCreatingChat, setIsCreatingChat] = useState(false);
+
   const selectCharacter = async (character: Character) => {
+    // Prevenir múltiples clics simultáneos
+    if (isCreatingChat) {
+      return;
+    }
+
     try {
+      setIsCreatingChat(true);
       setError(null);
       
-      // Primero verificar si ya existe un chat con este personaje
-      try {
-        const existingChats = await fetch('http://localhost:4000/api/chats', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        
-        if (existingChats.ok) {
-          const chats = await existingChats.json();
-          const existingChat = chats.find((chat: any) => 
-            chat.partner.nombre === character.nombre && 
-            chat.partner.nacionalidad === character.nacionalidad
-          );
-          
-          if (existingChat) {
-            console.log('Usando chat existente:', existingChat);
-            // Redirigir al chat existente
-            router.push(`/chats/${existingChat._id}`);
-            return;
-          }
-        }
-      } catch (err) {
-        console.log('No se pudieron obtener chats existentes, creando nuevo chat');
-      }
-      
-      // Si no existe, crear chat con el personaje
+      // Solo llamar a la API del backend, que ya maneja la verificación de duplicados
       const result = await CharacterApi.createChatWithCharacter(character._id);
       if (result) {
-        console.log('Chat creado:', result);
-        // Redirigir al nuevo chat
+        // Redirigir al chat
         router.push(`/chats/${result.chatId}`);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error creando chat');
-      console.error('Error:', err);
+    } finally {
+      setIsCreatingChat(false);
     }
   };
 

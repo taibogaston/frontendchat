@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
 
 interface VerifyEmailPageProps {
   params: Promise<{
@@ -14,6 +15,7 @@ export default function VerifyEmailPage({ params }: VerifyEmailPageProps) {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('');
   const router = useRouter();
+  const { setAuthData } = useAuth();
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -26,15 +28,14 @@ export default function VerifyEmailPage({ params }: VerifyEmailPageProps) {
         setStatus('success');
         setMessage(data.message || 'Email verificado exitosamente');
         
-        // Guardar token y usuario
+        // Guardar token y usuario usando el contexto de autenticación
         if (data.token && data.user) {
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('user', JSON.stringify(data.user));
+          setAuthData(data.token, data.user);
           
           // Redirigir según el estado del onboarding
           setTimeout(() => {
             if (data.user?.onboardingCompleted) {
-              router.push('/chats');
+              router.push('/inicio');
             } else {
               router.push('/onboarding');
             }

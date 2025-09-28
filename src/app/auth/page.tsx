@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AuthModal from '@/components/Auth/AuthModal';
 import { User } from '@/types/api';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function AuthPage() {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
+  const { setAuthData } = useAuth();
 
   useEffect(() => {
     // Verificar si ya está autenticado
@@ -20,8 +22,16 @@ export default function AuthPage() {
   }, [router]);
 
   const handleLoginSuccess = (token: string, user: User) => {
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
+    console.log("🔐 AuthPage - handleLoginSuccess called:", { 
+      userId: user.id, 
+      email: user.email,
+      tokenPreview: token.substring(0, 20) + '...'
+    });
+    
+    // Usar setAuthData para actualizar el contexto correctamente
+    setAuthData(token, user);
+    
+    console.log("🔐 AuthPage - Auth data set, redirecting...");
     
     if (user.onboardingCompleted) {
       router.push('/chats');

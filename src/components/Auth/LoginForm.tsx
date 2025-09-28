@@ -27,18 +27,11 @@ export default function LoginForm({ onSwitchToRegister, onLoginSuccess }: LoginF
     try {
       const data = await apiClient.login(formData.email, formData.password);
       
-      // Guardar token en localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      console.log("🔐 LoginForm - Login successful, calling onLoginSuccess");
       
+      // Solo llamar onLoginSuccess, no duplicar la lógica
       onLoginSuccess(data.token, data.user);
       
-      // Redirigir según el estado del onboarding
-      if (data.user.onboardingCompleted) {
-        router.push('/chats');
-      } else {
-        router.push('/onboarding');
-      }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Error de conexión';
       setError(errorMessage);

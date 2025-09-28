@@ -30,21 +30,52 @@ export default function ChatsPage() {
   const { data, isLoading, error } = useQuery<Chat[]>({
     queryKey: ["chats", user?.id, token],
     queryFn: async () => {
-      console.log("ChatsPage - queryFn executing:", { userId: user?.id, hasToken: !!token });
-      if (!token || !user?.id) throw new Error("No autenticado");
+      console.log("🔍 ChatsPage - queryFn executing:", { 
+        userId: user?.id, 
+        userIdType: typeof user?.id,
+        hasToken: !!token,
+        tokenPreview: token ? token.substring(0, 20) + '...' : 'none',
+        userObject: user
+      });
       
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/chats`, {
+      if (!token || !user?.id) {
+        console.log("❌ ChatsPage - No token or user ID");
+        throw new Error("No autenticado");
+      }
+      
+      const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/chats`;
+      console.log("🌐 ChatsPage - Fetching from:", url);
+      
+      const res = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
-      if (!res.ok) throw new Error("Error cargando chats");
+      
+      console.log("📡 ChatsPage - Response status:", res.status);
+      console.log("📡 ChatsPage - Response headers:", Object.fromEntries(res.headers.entries()));
+      
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.log("❌ ChatsPage - Error response:", errorText);
+        throw new Error(`Error ${res.status}: ${errorText}`);
+      }
+      
       const result = await res.json();
-      console.log("ChatsPage - queryFn result:", result);
+      console.log("✅ ChatsPage - Success result:", result);
+      console.log("📊 ChatsPage - Number of chats:", result.length);
+      
       return result;
     },
     enabled: !!token && !!user?.id, // Solo ejecutar si hay token y user
+    retry: (failureCount, error) => {
+      console.log("🔄 ChatsPage - Retry attempt:", failureCount, error.message);
+      if (error.message.includes('Token inválido') || error.message.includes('401')) {
+        return false;
+      }
+      return failureCount < 3;
+    },
   });
 
   return (
@@ -64,6 +95,21 @@ export default function ChatsPage() {
             >
               Ir a Inicio
             </Link>
+          </div>
+        </div>
+
+        {/* Debug Info */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <h3 className="font-bold text-lg text-yellow-800 mb-2">🐛 Debug Info</h3>
+          <div className="text-sm text-yellow-700 space-y-1">
+            <p><strong>User ID:</strong> {user?.id || 'No user'}</p>
+            <p><strong>User ID Type:</strong> {typeof user?.id}</p>
+            <p><strong>Has Token:</strong> {token ? 'Yes' : 'No'}</p>
+            <p><strong>Token Preview:</strong> {token ? token.substring(0, 20) + '...' : 'None'}</p>
+            <p><strong>Is Loading:</strong> {isLoading ? 'Yes' : 'No'}</p>
+            <p><strong>Has Error:</strong> {error ? 'Yes' : 'No'}</p>
+            <p><strong>Error Message:</strong> {error?.message || 'None'}</p>
+            <p><strong>Data Length:</strong> {data?.length || 0}</p>
           </div>
         </div>
         {isLoading && <div className="text-[var(--muted-foreground)]">Cargando...</div>}

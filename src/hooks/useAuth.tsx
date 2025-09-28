@@ -26,6 +26,7 @@ interface AuthContextType {
   register: (nombre: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
+  setAuthData: (token: string, user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,15 +42,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const storedToken = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
 
+    console.log("🔐 useAuth - useEffect triggered");
+    console.log("🔐 useAuth - storedToken:", storedToken ? storedToken.substring(0, 20) + '...' : 'none');
+    console.log("🔐 useAuth - storedUser:", storedUser ? 'exists' : 'none');
+
     if (storedToken && storedUser) {
       try {
+        const parsedUser = JSON.parse(storedUser);
+        console.log("🔐 useAuth - Setting auth data:", { 
+          userId: parsedUser.id, 
+          email: parsedUser.email,
+          tokenPreview: storedToken.substring(0, 20) + '...'
+        });
         setToken(storedToken);
-        setUser(JSON.parse(storedUser));
+        setUser(parsedUser);
       } catch (error) {
-        console.error('Error parsing stored user data:', error);
+        console.error('❌ useAuth - Error parsing stored user data:', error);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
       }
+    } else {
+      console.log("🔐 useAuth - No stored auth data found");
     }
 
     setLoading(false);
@@ -57,7 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,13 +81,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
 
       if (response.ok) {
-        setToken(data.token);
-        setUser(data.user);
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        console.log("🔐 useAuth - Login successful:", { 
+          userId: data.user?.id, 
+          email: data.user?.email,
+          tokenPreview: data.token ? data.token.substring(0, 20) + '...' : 'none'
+        });
+        
+        // Usar setAuthData para consistencia
+        setAuthData(data.token, data.user);
+        
+        console.log("🔐 useAuth - Auth data set after login");
         
         return { success: true };
       } else {
+        console.log("❌ useAuth - Login failed:", data.error);
         return { success: false, error: data.error || 'Error en el login' };
       }
     } catch {
@@ -84,7 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const register = async (nombre: string, email: string, password: string) => {
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -120,6 +140,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const setAuthData = (token: string, user: User) => {
+    console.log("🔐 useAuth - setAuthData called:", { 
+      userId: user.id, 
+      email: user.email,
+      tokenPreview: token.substring(0, 20) + '...'
+    });
+    setToken(token);
+    setUser(user);
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    console.log("🔐 useAuth - Auth data saved to localStorage");
+  };
+
   const value = {
     user,
     token,
@@ -128,6 +161,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     register,
     logout,
     updateUser,
+    setAuthData,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
