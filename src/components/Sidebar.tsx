@@ -22,20 +22,20 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 backdrop-blur-sm bg-gray-900/30 z-40"
+          className="fixed inset-0 backdrop-blur-sm bg-gray-900/30 dark:bg-gray-900/50 z-40"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 backdrop-blur-md bg-gray-100/95 border-l border-gray-300/30 transform transition-transform duration-300 ease-in-out z-50 ${
+        className={`fixed top-0 right-0 h-full w-80 backdrop-blur-md bg-[var(--sidebar-bg)]/95 border-l border-[var(--sidebar-border)]/30 transform transition-transform duration-300 ease-in-out z-50 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-300/30">
+          <div className="flex items-center justify-between p-6 border-b border-[var(--sidebar-border)]/30">
             <h2 className="text-xl font-semibold text-[var(--foreground)]">
               Menú
             </h2>
@@ -198,7 +198,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </nav>
 
           {/* Footer */}
-          <div className="p-6 border-t border-gray-300/30">
+          <div className="p-6 border-t border-[var(--sidebar-border)]/30">
             <button
               onClick={handleLogout}
               className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-red-600 hover:bg-opacity-20 transition-colors group hover:text-white"

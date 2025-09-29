@@ -2,6 +2,7 @@
 
 import { AuthProvider } from '../hooks/useAuth';
 import QueryProvider from './QueryProvider';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 
 interface ClientProvidersProps {
   children: React.ReactNode;
@@ -9,8 +10,10 @@ interface ClientProvidersProps {
 
 export default function ClientProviders({ children }: ClientProvidersProps) {
   return (
-    <AuthProvider>
-      <QueryProvider>{children}</QueryProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <QueryProvider>{children}</QueryProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

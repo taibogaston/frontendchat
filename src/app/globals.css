@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Tema inspirado en Character.ai */
+  /* Tema claro inspirado en Character.ai */
   --background: #ffffff;
   --foreground: #1a1a1a;
   --card: #ffffff;
@@ -21,6 +21,29 @@
   --sidebar-border: #e2e8f0;
   --hover: #f8fafc;
   --shadow: rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+  /* Tema oscuro inspirado en Character.ai */
+  --background: #0f0f0f;
+  --foreground: #ffffff;
+  --card: #1a1a1a;
+  --card-foreground: #ffffff;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #1f1f1f;
+  --secondary-foreground: #a1a1aa;
+  --muted: #262626;
+  --muted-foreground: #a1a1aa;
+  --accent: #6366f1;
+  --accent-foreground: #ffffff;
+  --border: #262626;
+  --input: #1f1f1f;
+  --ring: #6366f1;
+  --sidebar-bg: #1a1a1a;
+  --sidebar-border: #262626;
+  --hover: #262626;
+  --shadow: rgba(0, 0, 0, 0.3);
 }
 
 @theme inline {
@@ -52,6 +75,7 @@ body {
   font-family: var(--font-red-hat-display), system-ui, sans-serif;
   font-weight: 400;
   line-height: 1.5;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Estilos inspirados en Character.ai */
@@ -105,6 +129,7 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 3px;
+  transition: background-color 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {

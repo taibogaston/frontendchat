@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
+import DarkModeToggle from './DarkModeToggle';
 
 interface DarkHeaderProps {
   title?: string;
@@ -37,26 +38,32 @@ export default function DarkHeader({ title = "ChatBot" }: DarkHeaderProps) {
               </h1>
             </div>
 
-            {/* Botón del menú */}
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded-lg hover:bg-[var(--hover)] transition-colors"
-              aria-label="Abrir menú"
-            >
-              <svg
-                className="w-5 h-5 text-[var(--foreground)]"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {/* Controles del header */}
+            <div className="flex items-center space-x-3">
+              {/* Toggle de modo dark */}
+              <DarkModeToggle />
+              
+              {/* Botón del menú */}
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="p-2 rounded-lg hover:bg-[var(--hover)] transition-colors"
+                aria-label="Abrir menú"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
+                <svg
+                  className="w-5 h-5 text-[var(--foreground)]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </header>
